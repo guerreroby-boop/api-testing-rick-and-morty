@@ -1,0 +1,13 @@
+{
+  "name": "rickandmorty-api-tests",
+  "version": "1.0.0",
+  "description": "Automatización de APIs con Newman y reporte htmlextra",
+  "main": "index.js",
+  "scripts": {
+    "test": "newman run \"$COLLECTION_URL\" -e \"$ENV_URL\" -r cli,htmlextra --reporter-htmlextra-export report.html"
+  },
+  "dependencies": {
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}
