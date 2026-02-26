@@ -26,12 +26,16 @@ pipeline {
         }
 
         stage('Ejecutar Pruebas de API') {
-            steps {
-                // Forzamos el uso de las variables directamente en el comando
-               // sh "newman run \"${COLLECTION_URL}\" -e \"${ENV_URL}\" -r cli,htmlextra --reporter-htmlextra-export report.html"
-                sh "newman run https://api.postman.com/collections/${COLL_ID}?access_key=${P_KEY} -e https://api.postman.com/environments/${ENV_ID}?access_key=${P_KEY} -r cli,htmlextra --reporter-htmlextra-export report.html"
-            }
+        steps {
+            // Usamos el Header 'X-Api-Key' en lugar de ponerlo en la URL con ?access_key=
+            sh """
+            newman run "https://api.postman.com/collections/${COLL_ID}" \
+            -e "https://api.postman.com/environments/${ENV_ID}" \
+            --header "X-Api-Key: ${P_KEY}" \
+            -r cli,htmlextra --reporter-htmlextra-export report.html
+            """
         }
+    }
         stage('Debug Secret') {
         steps {
             // Esto imprimirá asteriscos si la credencial existe
