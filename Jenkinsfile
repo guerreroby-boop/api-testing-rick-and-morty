@@ -10,8 +10,8 @@ pipeline {
         P_KEY = credentials('POSTMAN_API_KEY')
         
         // REVISA ESTOS IDs en la web de Postman (Info del elemento)
-        COLL_ID = 'TU_ID_DE_COLECCION_AQUI'
-        ENV_ID = 'TU_ID_DE_ENTORNO_AQUI'
+        COLL_ID = '52350672-de8ed765-9857-43a4-8ac1-a3ae1bb9c4b4'
+        ENV_ID = '52350672-97baea4a-58eb-49a3-b269-347099adf81d'
         
         // Construcción de URLs con comillas DOBLES
         COLLECTION_URL = "https://api.postman.com/collections/${COLL_ID}?access_key=${P_KEY}"
