@@ -31,6 +31,12 @@ pipeline {
                 sh "newman run \"${COLLECTION_URL}\" -e \"${ENV_URL}\" -r cli,htmlextra --reporter-htmlextra-export report.html"
             }
         }
+        stage('Debug Secret') {
+        steps {
+            // Esto imprimirá asteriscos si la credencial existe
+            sh 'echo "La API Key configurada es: $P_KEY"'
+            }
+        }
     }
     
     post {
