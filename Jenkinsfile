@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'node20' 
+    }
+
     environment {
         // Estas credenciales las debes crear en Jenkins como 'Secret Text'
         POSTMAN_API_KEY = credentials('POSTMAN_API_KEY')
