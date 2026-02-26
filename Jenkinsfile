@@ -1,48 +1,45 @@
 pipeline {
     agent any
-
+    
     tools {
         nodejs 'node20' 
     }
 
     environment {
-        // Estas credenciales las debes crear en Jenkins como 'Secret Text'
-        POSTMAN_API_KEY = credentials('POSTMAN_API_KEY')
+        // Asegúrate de que el ID de la credencial sea exacto
+        P_KEY = credentials('POSTMAN_API_KEY')
         
-        // Reemplaza estos IDs con los que obtuviste de Postman
-        COLLECTION_ID = 'tu-id-de-coleccion'
-        ENV_ID = 'tu-id-de-entorno'
+        // REVISA ESTOS IDs en la web de Postman (Info del elemento)
+        COLL_ID = 'TU_ID_DE_COLECCION_AQUI'
+        ENV_ID = 'TU_ID_DE_ENTORNO_AQUI'
         
-        // Construimos las URLs dinámicamente
-        COLLECTION_URL = "https://api.postman.com/collections/${COLLECTION_ID}?access_key=${POSTMAN_API_KEY}"
-        ENV_URL = "https://api.postman.com/environments/${ENV_ID}?access_key=${POSTMAN_API_KEY}"
+        // Construcción de URLs con comillas DOBLES
+        COLLECTION_URL = "https://api.postman.com/collections/${COLL_ID}?access_key=${P_KEY}"
+        ENV_URL = "https://api.postman.com/environments/${ENV_ID}?access_key=${P_KEY}"
     }
 
     stages {
         stage('Preparar Ambiente') {
             steps {
-                // Instalamos las dependencias del package.json (newman y htmlextra)
                 sh 'npm install'
             }
         }
 
         stage('Ejecutar Pruebas de API') {
             steps {
-                // Ejecutamos el script 'test' que definimos en el package.json
-                // Le pasamos las URLs como variables de entorno
-                sh 'npm test'
+                // Forzamos el uso de las variables directamente en el comando
+                sh "newman run \"${COLLECTION_URL}\" -e \"${ENV_URL}\" -r cli,htmlextra --reporter-htmlextra-export report.html"
             }
         }
     }
-
+    
     post {
         always {
-            // Publicamos el reporte htmlextra en la interfaz de Jenkins
             publishHTML(target: [
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: '.', 
+                reportDir: '.',
                 reportFiles: 'report.html',
                 reportName: 'Reporte de APIs Rick & Morty'
             ])
