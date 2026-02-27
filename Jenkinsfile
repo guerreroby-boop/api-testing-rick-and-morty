@@ -27,17 +27,11 @@ pipeline {
 
         stage('Ejecutar Pruebas de API') {
         steps {
-            // Cambiamos -H por --header y usamos comillas triples para evitar conflictos de terminal
-            sh """
-            newman run https://api.postman.com/collections/${COLL_ID} \
-            --header "X-Api-Key: ${P_KEY}" \
-            -e https://api.postman.com/environments/${ENV_ID} \
-            --header "X-Api-Key: ${P_KEY}" \
-            -r cli,htmlextra --reporter-htmlextra-export report.html
-            """
+            // Usamos la URL con el parámetro apikey, protegida por comillas simples
+            sh "newman run 'https://api.postman.com/collections/${COLL_ID}?apikey=${P_KEY}' -e 'https://api.postman.com/environments/${ENV_ID}?apikey=${P_KEY}' -r cli,htmlextra --reporter-htmlextra-export report.html"
             }
         }
-        
+
         stage('Debug Secret') {
         steps {
             // Esto imprimirá asteriscos si la credencial existe
