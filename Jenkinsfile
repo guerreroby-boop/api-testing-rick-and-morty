@@ -27,10 +27,11 @@ pipeline {
 
         stage('Ejecutar Pruebas de API') {
         steps {
-            // Usamos la PMAT que sacaste de 'Share Via API'
-            sh "newman run 'https://api.postman.com/collections/${COLL_ID}?access_key=${P_KEY}' -e 'https://api.postman.com/environments/${ENV_ID}?access_key=${P_KEY}' -r cli,htmlextra --reporter-htmlextra-export report.html"
-            }
+            // La colección se baja de la nube con la PMAT (P_KEY)
+            // El entorno se lee localmente desde el archivo del repositorio (-e)
+            sh "newman run 'https://api.postman.com/collections/${COLL_ID}?access_key=${P_KEY}' -e RickAndMortyAPIURL.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export report.html"
         }
+    }
 
         stage('Debug Secret') {
         steps {
